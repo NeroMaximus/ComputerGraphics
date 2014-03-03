@@ -31,6 +31,7 @@ public class MainWindow extends JFrame{
 
         setLayout(new BorderLayout());
         setSize(800, 600);
+        setLocationRelativeTo( null);
         setMinimumSize(new Dimension(800, 600));
 
         add(createMenuPane(), BorderLayout.NORTH);
