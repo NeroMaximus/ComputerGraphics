@@ -20,18 +20,36 @@ public class DrawingPanel extends JPanel{
         Graphics2D graphics2D = (Graphics2D) graphics;
 
         BufferedImage bufferedImage = new BufferedImage(getWidth(), getHeight(), 1);
-        drawRound(bufferedImage, 200, 200, 100);
+        drawRound(bufferedImage, 250, 250, 200);
         graphics2D.drawImage(bufferedImage, null, 0,0);
     }
 
     private void drawRound(BufferedImage bufferedImage, int center_x, int center_y, int r) {
-        int x, y;
-        for( x = -r; x <= r; x++){
-            y = (int) Math.sqrt( r * r - x * x);
-            bufferedImage.setRGB( x + center_x, Convert_Y(y) + center_y, 255);
-            if( y != 0) {
-                bufferedImage.setRGB( x + center_x, Convert_Y( -y) + center_y, 255);
+        int x = 0;
+        int y = r;
+        int delta = 1 - 2*r; //difference between the diagonal pixel and radius; (x + 1)*(x + 1) + (y - 1)*(y - 1) - r*r;
+        int error = 0;
+        while(y >= 0) {
+            bufferedImage.setRGB( center_x + x, center_y + Convert_Y(y), 255);
+            bufferedImage.setRGB( center_x + x, center_y - Convert_Y(y), 255);
+            bufferedImage.setRGB( center_x - x, center_y + Convert_Y(y), 255);
+            bufferedImage.setRGB( center_x - x, center_y - Convert_Y(y), 255);
+
+            error = 2 * (delta + y) - 1;
+            if(delta < 0 && error <= 0) {// 1,2
+                ++x;
+                delta += 2 * x + 1;
+                continue;
             }
+            error = 2 * (delta - x) - 1;
+            if(delta > 0 && error > 0) {//3,4
+                --y;
+                delta += 1 - 2 * y;
+                continue;
+            }
+            ++x;
+            delta += 2 * (x - y);
+            --y;
         }
     }
 }

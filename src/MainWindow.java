@@ -2,25 +2,31 @@ import icons.InfoPanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.net.URL;
 
 /**
  * Created by Arlis on 23.02.14.
+ * Класс главного окна приложения
  */
 public class MainWindow extends JFrame{
     private final static int menuBarHeight = 16;
     private DrawingPanel drawingPanel = null;
     private InfoPanel infoPanel = null;
-    JRadioButtonMenuItem rbMenuItem;
-    JCheckBoxMenuItem cbMenuItem;
 
     MainWindow(String s){
         super(s);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                System.exit(0);
+                Object[] options = {"Yes", "No"};
+                int answer = JOptionPane.showOptionDialog(e.getWindow(), "Do you want to close the window?",
+                        "Confirmation", JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+
+                if (answer == 0){
+                    e.getWindow().setVisible(false);
+                    System.exit(0);
+                }
             }
         });
         try {
@@ -42,13 +48,13 @@ public class MainWindow extends JFrame{
         drawingPanel = new DrawingPanel();
         add(drawingPanel, BorderLayout.CENTER);
 
-
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         pack();
         setVisible(true);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     JPanel createMenuPane(){
+
         JPanel panel = new JPanel();
         panel.setSize(10,menuBarHeight*2);
 
@@ -67,6 +73,22 @@ public class MainWindow extends JFrame{
         menuFile.add(menuItemSave);
         menuFile.addSeparator();
         menuFile.add(menuItemExit);
+
+        menuItemExit.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+                System.exit(0);
+            }
+        });
+        menuItemAbout.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                JFrame frame = new JFrame("About");
+                frame.setSize(200, 200);
+                frame.setLocationRelativeTo( null);
+                frame.add( new JLabel("fffffff"));
+                frame.setVisible(true);
+            }
+        });
 
         menuHelp.setPreferredSize( new Dimension(50,menuBarHeight));
         menuHelp.add(menuItemAbout);
@@ -98,7 +120,7 @@ public class MainWindow extends JFrame{
         ImageIcon icon = new ImageIcon(imgURL);
         if (imgURL != null) {
             if(icon.getIconHeight() > menuBarHeight){
-                System.out.print("fuck");
+                System.err.print("ERROR! Icon's height is bigger than menu's height!");
                 icon = new ImageIcon(icon.getImage().getScaledInstance(menuBarHeight, -1, Image.SCALE_DEFAULT));
             }
             return icon;
@@ -111,6 +133,6 @@ public class MainWindow extends JFrame{
 
     public static void main(String[] args){
         MainWindow mainWindow = new MainWindow("Laboratory work №1");
-
+        mainWindow.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     }
 }
