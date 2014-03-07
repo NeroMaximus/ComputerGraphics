@@ -133,6 +133,5 @@ public class MainWindow extends JFrame{
 
     public static void main(String[] args){
         MainWindow mainWindow = new MainWindow("Laboratory work №1");
-        mainWindow.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     }
 }
