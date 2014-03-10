@@ -1,9 +1,8 @@
-import icons.InfoPanel;
+package ru.nsu.ccfit.damdinov;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.net.URL;
 
 /**
  * Created by Arlis on 23.02.14.
@@ -13,6 +12,7 @@ public class MainWindow extends JFrame{
     private final static int menuBarHeight = 16;
     private DrawingPanel drawingPanel = null;
     private InfoPanel infoPanel = null;
+    private JFrame a = this;
 
     MainWindow(String s){
         super(s);
@@ -41,12 +41,15 @@ public class MainWindow extends JFrame{
         setMinimumSize(new Dimension(800, 600));
 
         add(createMenuPane(), BorderLayout.NORTH);
-        infoPanel = new InfoPanel();
-        infoPanel.setPreferredSize(new Dimension(300, 100));
-        add(infoPanel, BorderLayout.EAST);
 
         drawingPanel = new DrawingPanel();
         add(drawingPanel, BorderLayout.CENTER);
+
+        infoPanel = new InfoPanel(drawingPanel);
+        infoPanel.setPreferredSize(new Dimension(300, 100));
+        add(infoPanel, BorderLayout.EAST);
+
+
 
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         pack();
@@ -54,7 +57,6 @@ public class MainWindow extends JFrame{
     }
 
     JPanel createMenuPane(){
-
         JPanel panel = new JPanel();
         panel.setSize(10,menuBarHeight*2);
 
@@ -66,29 +68,38 @@ public class MainWindow extends JFrame{
         JMenuItem menuItemExit = new JMenuItem("Exit");
         JMenuItem menuItemSave = new JMenuItem("Save");
         JMenuItem menuItemAbout = new JMenuItem("About");
-        JButton menuItemIconQuest = new JButton();
-        JButton menuItemIconCross = new JButton(createImageIcon("/icons/cross.png"));
-        menuItemIconQuest.setIcon(createImageIcon("/icons/quest.png"));
+        JButton menuItemIconQuest = new JButton(createImageIcon("/ru/nsu/ccfit/damdinov/icons/quest.png"));
+        JButton menuItemIconCross = new JButton(createImageIcon("/ru/nsu/ccfit/damdinov/icons/cross.png"));
         menuFile.setPreferredSize( new Dimension(50,menuBarHeight));
         menuFile.add(menuItemSave);
         menuFile.addSeparator();
         menuFile.add(menuItemExit);
+        ActionListener aboutListener = new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                JFrame f = new JFrame("d");
+                f.setLocationRelativeTo( getRootPane());
+                JOptionPane.showMessageDialog( f, "This program is laboratory work from NSU. For offers: damdinovr@gmail.com. All rights aren't reserved. 2014.");
+            }
+        };
+        ActionListener closeListener = new ActionListener() {
+            public void actionPerformed(ActionEvent a) {
+                JFrame e = new JFrame("Close");
+                Object[] options = {"Yes", "No"};
+                int answer = JOptionPane.showOptionDialog(e, "Do you want to close the window?",
+                        "Confirmation", JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 
-        menuItemExit.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                setVisible(false);
-                System.exit(0);
+                if (answer == 0){
+                    e.setVisible(false);
+                    System.exit(0);
+                }
             }
-        });
-        menuItemAbout.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                JFrame frame = new JFrame("About");
-                frame.setSize(200, 200);
-                frame.setLocationRelativeTo( null);
-                frame.add( new JLabel("fffffff"));
-                frame.setVisible(true);
-            }
-        });
+        };
+
+        menuItemExit.addActionListener(closeListener);
+        menuItemAbout.addActionListener(aboutListener);
+        menuItemIconCross.addActionListener(closeListener);
+        menuItemIconQuest.addActionListener(aboutListener);
 
         menuHelp.setPreferredSize( new Dimension(50,menuBarHeight));
         menuHelp.add(menuItemAbout);
