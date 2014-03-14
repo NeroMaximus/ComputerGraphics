@@ -17,7 +17,18 @@ public class InfoPanel extends JPanel {
         drawCircle.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Integer radius = Integer.parseInt(JOptionPane.showInputDialog("Radius", "100"));
+                String sRadius = JOptionPane.showInputDialog("Radius", "100");
+                for(int i = 0; i < sRadius.length(); i++){
+                    if( sRadius.charAt(i) < '0' || sRadius.charAt(i) > '9'){
+                        JOptionPane.showMessageDialog( null, "bad args!");
+                        return;
+                    }
+                }
+                Integer radius = Integer.parseInt(sRadius);
+                if( radius < 0){
+                    JOptionPane.showMessageDialog( null, "bad args!");
+                    return;
+                }
                 if (radius != null) {
                     drawingPanel.drawRound(250, 250, radius);
                     drawingPanel.repaint();

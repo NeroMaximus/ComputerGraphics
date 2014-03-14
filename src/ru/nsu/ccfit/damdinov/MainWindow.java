@@ -10,6 +10,7 @@ import java.awt.event.*;
  */
 public class MainWindow extends JFrame{
     private final static int menuBarHeight = 16;
+    private final MainWindow me;
     private DrawingPanel drawingPanel = null;
     private InfoPanel infoPanel = null;
     private JFrame a = this;
@@ -29,31 +30,25 @@ public class MainWindow extends JFrame{
                 }
             }
         });
-        try {
-            UIManager.setLookAndFeel(
-                    UIManager.getCrossPlatformLookAndFeelClassName());
-        }
-        catch (Exception e) { }
 
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setLayout(new BorderLayout());
         setSize(800, 600);
-        setLocationRelativeTo( null);
+        setLocationRelativeTo(null);
         setMinimumSize(new Dimension(800, 600));
 
-        add(createMenuPane(), BorderLayout.NORTH);
-
         drawingPanel = new DrawingPanel();
-        add(drawingPanel, BorderLayout.CENTER);
 
         infoPanel = new InfoPanel(drawingPanel);
         infoPanel.setPreferredSize(new Dimension(300, 100));
+
+        add(createMenuPane(), BorderLayout.NORTH);
+        add(drawingPanel, BorderLayout.CENTER);
         add(infoPanel, BorderLayout.EAST);
 
-
-
-        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         pack();
         setVisible(true);
+        me = this;
     }
 
     JPanel createMenuPane(){
@@ -61,7 +56,8 @@ public class MainWindow extends JFrame{
         panel.setSize(10,menuBarHeight*2);
 
         JMenuBar menuBar1 = new JMenuBar();
-        JMenuBar menuBar2 = new JMenuBar();
+        JToolBar menuBar2 = new JToolBar();
+        menuBar2.setFloatable(false);
 
         JMenu menuHelp = new JMenu("Help");
         JMenu menuFile = new JMenu("File");
@@ -76,9 +72,7 @@ public class MainWindow extends JFrame{
         menuFile.add(menuItemExit);
         ActionListener aboutListener = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                JFrame f = new JFrame("d");
-                f.setLocationRelativeTo( getRootPane());
-                JOptionPane.showMessageDialog( f, "This program is laboratory work from NSU. For offers: damdinovr@gmail.com. All rights aren't reserved. 2014.");
+                JOptionPane.showMessageDialog( me, "This program is laboratory work from NSU. For offers: damdinovr@gmail.com. All rights aren't reserved. 2014.");
             }
         };
         ActionListener closeListener = new ActionListener() {
