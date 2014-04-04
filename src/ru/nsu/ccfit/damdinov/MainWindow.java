@@ -1,6 +1,7 @@
 package ru.nsu.ccfit.damdinov;
 
 import javax.swing.*;
+import javax.swing.plaf.synth.SynthEditorPaneUI;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -15,8 +16,8 @@ public class MainWindow extends JFrame{
     private InfoPanel infoPanel = null;
     private JFrame a = this;
 
-    MainWindow(String s){
-        super(s);
+    MainWindow(String name){
+        super(name);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 Object[] options = {"Yes", "No"};

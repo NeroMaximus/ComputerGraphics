@@ -2,18 +2,29 @@ package ru.nsu.ccfit.damdinov;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 
 /**
  * Created by Arlis on 01.03.14.
  */
-public class DrawingPanel extends JPanel{
-    BufferedImage bufferedImage = new BufferedImage(2000, 2000, 1);
+public class DrawingPanel extends JPanel implements MouseMotionListener, MouseWheelListener{
+    Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+    BufferedImage bufferedImage;
+
+
     int oldWidth = 0;
     int oldHeight = 0;
     DrawingPanel(){
         super();
-        setBackground(Color.WHITE);
+        bufferedImage = new BufferedImage((int) d.getWidth(), (int) d.getHeight(), 1);
+        Graphics2D graphics2D = bufferedImage.createGraphics();
+        graphics2D.setPaint( new Color(255, 255, 255));
+
+        graphics2D.fillRect(0, 0, bufferedImage.getWidth(), bufferedImage.getHeight());
     }
 
     private int Convert_Y( int y) {
@@ -60,6 +71,21 @@ public class DrawingPanel extends JPanel{
             delta += 2 * (x - y);
             --y;
         }
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent e) {
+
     }
 }
 
